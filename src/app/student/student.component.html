@@ -1,0 +1,25 @@
+<div class="container">
+    <button type="button" (click)="button()"> get data</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>StudentId</th>&nbsp;&nbsp;
+            <th>StudentFirstName</th>&nbsp;&nbsp;
+            <th>StudentSurName</th>&nbsp;&nbsp;
+            <th>Gender</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let student of students">
+            <td>{{student.studentId}}</td>&nbsp;&nbsp;
+            <td>{{student.studentFirstName}}</td>&nbsp;&nbsp;
+            <td>{{student.studentSurName}}</td>&nbsp;&nbsp;
+            <td>{{student.gender}}</td>
+           
+        </tr>
+    </tbody>
+
+</table>
+
+</div>
