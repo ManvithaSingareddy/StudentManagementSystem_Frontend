@@ -9,6 +9,10 @@ export class StudentService {
   constructor(private http:HttpClient) { }
 
   getStudent(){
-    return this.http.get("http://localhost:8080/StudentDetails");
+    return this.http.get<any>("http://localhost:8080/StudentDetails");
+  }
+
+  getCourseDetails(courseId:Number){
+    return this.http.get<any>(`http://localhost:8080/coursedetails/${courseId}`)
   }
 }
