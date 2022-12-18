@@ -1,0 +1,144 @@
+<nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light">
+  <div class="container">
+    <a class="navbar-brand">Student Management System</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto align-items-center">
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link mx-2" ><i class="fas fa-plus pe-2"></i>Add Student</a>-->
+<!--        </li>-->
+        <li class="nav-item">
+          <a class="nav-link mx-2"  ><i class="fas fa-user pe-2"></i>
+            {{users}}
+          </a>
+        </li>
+        <li class="nav-item ms-3">
+          <a class="btn btn-black btn-rounded"
+           href="#"
+          ><i class="fas fa-sign-out pe-2"></i> Log out</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div style="margin-top: 70px">
+
+  <p-table  #dt [value]="products" [rows]="10" [paginator]="true" [globalFilterFields]="['firstName']"
+           responsiveLayout="scroll"
+           [rowHover]="true" dataKey="id"
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th >Student ID</th>
+        <th>Enrollment Number</th>
+        <th >Student Name</th>
+        <th >Student Email</th>
+        <th >Mobile Number</th>
+        <th >Course</th>
+        <th >Department</th>
+        <th>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr >
+        <td>{{product.id}}</td>
+        <td>{{product.entrollmentNumber}}</td>
+        <td>{{product.name}}</td>
+        <td>{{product.studentEmail}}</td>
+        <td>{{product.mobile_number}}</td>
+        <td>{{product.course}}</td>
+        <td>{{product.department}}</td>
+        <td>
+          <button pButton  icon="pi pi-pencil" (click)="update(product)" class="p-button-outlined  p-button-secondary " ></button> &nbsp;
+          <button pButton pRipple icon="pi pi-trash" (click)="deleteuser(product.studentEmail)" class="p-button-outlined p-button-warning " ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{products ? products.length : 0 }} Student details.
+      </div>
+    </ng-template>
+  </p-table>
+
+
+</div>
+
+
+<p-dialog  [(visible)]="displayUpdate"  [modal]="true" [style]="{width: '50vw'}"
+           [draggable]="false" [resizable]="false">
+  <ng-template pTemplate="header">
+    Update Student Page For {{selectedData.name}}
+  </ng-template>
+  <div>
+    <div class="grid p-fluid" style="margin-top: 10px; display: grid; grid-template-columns: auto auto; padding: 10px;">
+
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+          <input type="text" pInputText [(ngModel)]="updateNo" name="uMno" placeholder="Mobile Number">
+          <!--          <p-inputMask mask="(999) 999-9999" pInputText placeholder="(999) 999-9999"></p-inputMask>-->
+        </div>
+      </div>
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-book"></i></span>
+          <input type="text" pInputText [(ngModel)]="updateCourse" name="uc" placeholder="Course">
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-briefcase"></i></span>
+          <input type="text" pInputText [(ngModel)]="updateDep" name="updateDep" placeholder="Department">
+        </div>
+      </div>
+
+    </div>
+
+    <!--    <span class="p-float-label">-->
+    <!--    <input id="float-input1"  [(ngModel)]="uid" type="text" pInputText>-->
+    <!--    <label for="float-input1">Name</label>-->
+    <!--    </span>-->
+
+    <!--    <span class="p-float-label">-->
+    <!--    <input id="float-input3" [(ngModel)]="email" type="text" pInputText>-->
+    <!--    <label for="float-input3">User Name</label>-->
+    <!--    </span>-->
+
+    <!--    <span class="p-float-label">-->
+    <!--    <input id="float-input4" [(ngModel)]="password" type="text" pInputText>-->
+    <!--    <label for="float-input4">Password</label>-->
+    <!--    </span>-->
+
+    <span class="p-float-label" style="margin-top: 10px;margin-bottom: 90px">
+
+
+
+      <!--    <p-dropdown [options]="[{name: 'Admin', code: 'admin'},-->
+      <!--        {name: 'Professor', code: 'Professor'}]" [(ngModel)]="selectedCity" optionLabel="city"></p-dropdown>-->
+    </span>
+
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button (click)="updateDetails()" >Save</p-button> &nbsp;
+    <p-button (click)="displayUpdate=!displayUpdate" class="p-button-danger" >Close</p-button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

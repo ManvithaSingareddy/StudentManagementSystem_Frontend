@@ -1,0 +1,295 @@
+<nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light">
+  <div class="container">
+    <a class="navbar-brand">Student Management System</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto align-items-center">
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link mx-2" *ngIf="auth.user$ | async as user"  (click)="display=true" ><i class="fas fa-plus pe-2"></i>Add Student</a>-->
+<!--        </li>-->
+        <li class="nav-item">
+
+        </li>
+        <li class="nav-item ms-3">
+          <a class="btn btn-black btn-rounded" *ngIf="(auth.isAuthenticated$ | async) === false"
+             (click)="login()"
+          ><i class="fas fa-sign-in pe-2"></i>Sign in</a>
+          <a class="btn btn-black btn-rounded" *ngIf="auth.isAuthenticated$| async"
+             (click) ="logout()"
+          ><i class="fas fa-sign-out pe-2"></i> Log out</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <div style="margin-top: 70px">
+    <a class="nav-link mx-2" *ngIf="auth.user$ | async as user" ><i class="fas fa-user pe-2"></i>
+     Hi, {{users}}. Welcome to
+    </a>
+    <p-table *ngIf="auth.isAuthenticated$| async" #dt [value]="products" [rows]="10" [paginator]="true" [globalFilterFields]="['firstName']"
+             responsiveLayout="scroll"
+             [rowHover]="true" dataKey="id"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <ng-template pTemplate="header">
+        <tr>
+          <th >Student ID</th>
+          <th>Enrollment Number</th>
+          <th >Student Name</th>
+          <th >Student Email</th>
+          <th >Mobile Number</th>
+          <th >Course</th>
+          <th >Department</th>
+          <th>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr *ngIf="userdetails==product.studentEmail">
+          <td>{{product.id}}</td>
+          <td>{{product.entrollmentNumber}}</td>
+          <td>{{product.name}}</td>
+          <td>{{product.studentEmail}}</td>
+          <td>{{product.mobile_number}}</td>
+          <td>{{product.course}}</td>
+          <td>{{product.department}}</td>
+<!--          <td>-->
+<!--            <button pButton  icon="pi pi-pencil" (click)="update(product)" class="p-button-outlined  p-button-secondary " ></button> &nbsp;-->
+<!--            <button pButton pRipple icon="pi pi-trash" (click)="deleteuser(product.studentEmail)" class="p-button-outlined p-button-warning " ></button>-->
+<!--          </td>-->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="flex align-items-center justify-content-between">
+          In total there are {{products ? products.length : 0 }} Student details.
+        </div>
+      </ng-template>
+    </p-table>
+
+
+    <div  *ngIf="(auth.isAuthenticated$ | async) === false" style="z-index: 10;">
+      <!-- Section: Design Block -->
+      <section class="text-center">
+        <!-- Background image -->
+        <div class="bg-image bimage"
+        style="
+        background-image: url('../../sms.jpeg');
+        height: 300px;
+        "></div>
+        <!-- Background image -->
+
+        <div class="card mx-4 mx-md-5 shadow-5-strong" style="
+        margin-top: -100px;
+        background: hsla(0, 0%, 100%, 0.8);
+        backdrop-filter: blur(30px);
+        ">
+          <div class="card-body py-5 px-md-5">
+
+            <div class="row d-flex justify-content-center">
+              <div class="col-lg-8">
+                <h2 class="fw-bold mb-5">Sign In Here.</h2>
+                <form>
+                  <!-- 2 column grid layout with text inputs for the first and last names -->
+
+
+                  <!-- Email input -->
+                  <div class="form-outline mb-4">
+                    <input type="email" id="form3Example3" [(ngModel)]="username" name="usname" class="form-control" />
+                    <label class="form-label" for="form3Example3">Email address</label>
+                  </div>
+
+                  <!-- Password input -->
+                  <div class="form-outline mb-4">
+                    <input type="password" [(ngModel)]="pwd" name="and" id="form3Example4" class="form-control" />
+                    <label class="form-label" for="form3Example4">Password</label>
+                  </div>
+
+                  <!-- Checkbox -->
+                  <div class="form-check d-flex justify-content-center mb-4">
+
+                  </div>
+
+                  <!-- Submit button -->
+                  <button type="submit" (click)="adminlogin()" class="btn btn-dark btn-lg btn-block">
+                    Sign in
+                  </button>
+
+                  <!-- Register buttons -->
+                  <div class="text-center">
+                    <p>or sign in with Okta auth0</p>
+
+
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Section: Design Block -->
+    </div>
+  </div>
+<!--  <button *ngIf="(auth.isAuthenticated$ | async) === false"-->
+<!--          (click)="login()"-->
+<!--          id="login">Login</button>-->
+
+<!--  <button *ngIf="auth.isAuthenticated$| async"-->
+<!--          (click) ="logout()"-->
+<!--          id="loqout">-->
+<!--    Logout</button>-->
+<!--</div>-->
+
+<p-dialog  [(visible)]="display"  [modal]="true" [style]="{width: '50vw'}"
+           [draggable]="false" [resizable]="false">
+  <ng-template pTemplate="header">
+    Add New Student Page:
+  </ng-template>
+  <div>
+    <div class="grid p-fluid" style="margin-top: 10px; display: grid; grid-template-columns: auto auto; padding: 10px;">
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+          <input type="text" pInputText [(ngModel)]="studentName" name="user" [disabled]="true" placeholder="Student Name">
+        </div>
+      </div>
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-desktop"></i></span>
+          <input type="text" pInputText [(ngModel)]="entrollmentNumber" name="Eno" placeholder="Enrollment Number">
+          <!--          <p-inputMask mask="(999) 999-9999" pInputText placeholder="(999) 999-9999"></p-inputMask>-->
+        </div>
+      </div>
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>
+          <input type="text" pInputText [(ngModel)]="mobileNumber" name="mno" placeholder="Mobile Number">
+<!--          <p-inputMask mask="(999) 999-9999" pInputText placeholder="(999) 999-9999"></p-inputMask>-->
+        </div>
+      </div>
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-at"></i></span>
+          <input type="text" pInputText [(ngModel)]="email" name="email" [disabled]="true" placeholder="Email">
+        </div>
+      </div>
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-book"></i></span>
+          <input type="text" pInputText [(ngModel)]="course" name="course" placeholder="Course">
+        </div>
+      </div>
+
+      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-briefcase"></i></span>
+          <input type="text" pInputText [(ngModel)]="dep" name="dep" placeholder="Department">
+        </div>
+      </div>
+
+    </div>
+
+<!--    <span class="p-float-label">-->
+<!--    <input id="float-input1"  [(ngModel)]="uid" type="text" pInputText>-->
+<!--    <label for="float-input1">Name</label>-->
+<!--    </span>-->
+
+<!--    <span class="p-float-label">-->
+<!--    <input id="float-input3" [(ngModel)]="email" type="text" pInputText>-->
+<!--    <label for="float-input3">User Name</label>-->
+<!--    </span>-->
+
+<!--    <span class="p-float-label">-->
+<!--    <input id="float-input4" [(ngModel)]="password" type="text" pInputText>-->
+<!--    <label for="float-input4">Password</label>-->
+<!--    </span>-->
+
+    <span class="p-float-label" style="margin-top: 10px;margin-bottom: 90px">
+
+
+
+      <!--    <p-dropdown [options]="[{name: 'Admin', code: 'admin'},-->
+      <!--        {name: 'Professor', code: 'Professor'}]" [(ngModel)]="selectedCity" optionLabel="city"></p-dropdown>-->
+    </span>
+
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button (click)="save()" >Save</p-button> &nbsp;
+    <p-button (click)="display=!display" class="p-button-danger" >Close</p-button>
+  </ng-template>
+</p-dialog>
+
+<!--<p-dialog  [(visible)]="displayUpdate"  [modal]="true" [style]="{width: '50vw'}"-->
+<!--           [draggable]="false" [resizable]="false">-->
+<!--  <ng-template pTemplate="header">-->
+<!--    Update Student Page For {{selectedData.name}}-->
+<!--  </ng-template>-->
+<!--  <div>-->
+<!--    <div class="grid p-fluid" style="margin-top: 10px; display: grid; grid-template-columns: auto auto; padding: 10px;">-->
+
+<!--      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">-->
+<!--        <div class="p-inputgroup">-->
+<!--          <span class="p-inputgroup-addon"><i class="pi pi-phone"></i></span>-->
+<!--          <input type="text" pInputText [(ngModel)]="updateNo" name="uMno" placeholder="Mobile Number">-->
+<!--          &lt;!&ndash;          <p-inputMask mask="(999) 999-9999" pInputText placeholder="(999) 999-9999"></p-inputMask>&ndash;&gt;-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">-->
+<!--        <div class="p-inputgroup">-->
+<!--          <span class="p-inputgroup-addon"><i class="pi pi-book"></i></span>-->
+<!--          <input type="text" pInputText [(ngModel)]="updateCourse" name="uc" placeholder="Course">-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <div class="col-12 md:col-4" style="padding-right: 10px;padding-top: 5px">-->
+<!--        <div class="p-inputgroup">-->
+<!--          <span class="p-inputgroup-addon"><i class="pi pi-briefcase"></i></span>-->
+<!--          <input type="text" pInputText [(ngModel)]="updateDep" name="updateDep" placeholder="Department">-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--    </div>-->
+
+<!--    &lt;!&ndash;    <span class="p-float-label">&ndash;&gt;-->
+<!--    &lt;!&ndash;    <input id="float-input1"  [(ngModel)]="uid" type="text" pInputText>&ndash;&gt;-->
+<!--    &lt;!&ndash;    <label for="float-input1">Name</label>&ndash;&gt;-->
+<!--    &lt;!&ndash;    </span>&ndash;&gt;-->
+
+<!--    &lt;!&ndash;    <span class="p-float-label">&ndash;&gt;-->
+<!--    &lt;!&ndash;    <input id="float-input3" [(ngModel)]="email" type="text" pInputText>&ndash;&gt;-->
+<!--    &lt;!&ndash;    <label for="float-input3">User Name</label>&ndash;&gt;-->
+<!--    &lt;!&ndash;    </span>&ndash;&gt;-->
+
+<!--    &lt;!&ndash;    <span class="p-float-label">&ndash;&gt;-->
+<!--    &lt;!&ndash;    <input id="float-input4" [(ngModel)]="password" type="text" pInputText>&ndash;&gt;-->
+<!--    &lt;!&ndash;    <label for="float-input4">Password</label>&ndash;&gt;-->
+<!--    &lt;!&ndash;    </span>&ndash;&gt;-->
+
+<!--    <span class="p-float-label" style="margin-top: 10px;margin-bottom: 90px">-->
+
+
+
+<!--      &lt;!&ndash;    <p-dropdown [options]="[{name: 'Admin', code: 'admin'},&ndash;&gt;-->
+<!--      &lt;!&ndash;        {name: 'Professor', code: 'Professor'}]" [(ngModel)]="selectedCity" optionLabel="city"></p-dropdown>&ndash;&gt;-->
+<!--    </span>-->
+
+<!--  </div>-->
+<!--  <ng-template pTemplate="footer">-->
+<!--    <p-button (click)="updateDetails()" >Save</p-button> &nbsp;-->
+<!--    <p-button (click)="displayUpdate=!displayUpdate" class="p-button-danger" >Close</p-button>-->
+<!--  </ng-template>-->
+<!--</p-dialog>-->
+
+<p-toast></p-toast>
+
+<p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
